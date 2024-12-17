@@ -1,0 +1,35 @@
+name: Go Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      - name: Build
+        run: |
+          go build ./dnstt-client
+          go build ./dnstt-server
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dnstt-binaries
+          path: |
+            dnstt-client
+            dnstt-server
