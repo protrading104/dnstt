@@ -24,8 +24,8 @@ jobs:
 
       - name: Build
         run: |
-          go build ./dnstt-client
-          go build ./dnstt-server
+          go build -o dnstt-client-bin ./dnstt-client
+          go build -o dnstt-server-bin ./dnstt-server
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
