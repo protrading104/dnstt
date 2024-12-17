@@ -24,13 +24,12 @@ jobs:
 
       - name: Build
         run: |
+          mkdir -p build
           go build -o dnstt-client-bin ./dnstt-client
           go build -o dnstt-server-bin ./dnstt-server
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dnstt-binaries
-          path: |
-            dnstt-client
-            dnstt-server
+          path: build/*          
