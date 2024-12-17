@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:  # Добавьте этот блок для ручного запуска
 
 jobs:
   build:
