@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - master
-  workflow_dispatch:  # Добавлено для ручного запуска
+  workflow_dispatch: # Возможность ручного запуска
 
 jobs:
   build:
@@ -24,25 +24,33 @@ jobs:
 
       - name: Build
         run: |
-          echo "Creating build directory..."
+          echo "=== Creating build directory ==="
           mkdir -p build
-          
-          echo "Building dnstt-client..."
-          go build -o ./build/dnstt-client ./dnstt-client || (echo "Failed to build dnstt-client" && exit 1)
-          
-          echo "Building dnstt-server..."
-          go build -o ./build/dnstt-server ./dnstt-server || (echo "Failed to build dnstt-server" && exit 1)
-          
-          echo "Checking contents of the build directory:"
+          ls -la
+
+          echo "=== Building dnstt-client ==="
+          if go build -o ./build/dnstt-client ./dnstt-client; then
+            echo "dnstt-client build successful"
+          else
+            echo "dnstt-client build failed!" && exit 1
+          fi
+
+          echo "=== Building dnstt-server ==="
+          if go build -o ./build/dnstt-server ./dnstt-server; then
+            echo "dnstt-server build successful"
+          else
+            echo "dnstt-server build failed!" && exit 1
+          fi
+
+          echo "=== Checking build directory contents ==="
           ls -la ./build
 
-      - name: Verify binary files
+      - name: Debug directories
         run: |
-          if [[ -f "./build/dnstt-client" && -f "./build/dnstt-server" ]]; then
-            echo "Binaries successfully created!"
-          else
-            echo "Binaries are missing!" && exit 1
-          fi
+          echo "=== Current working directory ==="
+          pwd
+          echo "=== Contents of the repository root ==="
+          ls -la
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
