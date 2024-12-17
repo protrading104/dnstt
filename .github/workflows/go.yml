@@ -24,9 +24,14 @@ jobs:
 
       - name: Build
         run: |
+          echo "Creating build directory..."
           mkdir -p build
-          go build -o dnstt-client-bin ./dnstt-client
-          go build -o dnstt-server-bin ./dnstt-server
+          echo "Building dnstt-client..."
+          go build -o build/dnstt-client ./dnstt-client
+          echo "Building dnstt-server..."
+          go build -o build/dnstt-server ./dnstt-server
+          echo "Contents of the build directory:"
+          ls -la build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
