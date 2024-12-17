@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - master
-  workflow_dispatch:  # Добавьте этот блок для ручного запуска
+  workflow_dispatch:  # Добавлено для ручного запуска
 
 jobs:
   build:
@@ -26,15 +26,26 @@ jobs:
         run: |
           echo "Creating build directory..."
           mkdir -p build
+          
           echo "Building dnstt-client..."
-          go build -o build/dnstt-client ./dnstt-client
+          go build -o ./build/dnstt-client ./dnstt-client || (echo "Failed to build dnstt-client" && exit 1)
+          
           echo "Building dnstt-server..."
-          go build -o build/dnstt-server ./dnstt-server
-          echo "Contents of the build directory:"
-          ls -la build
+          go build -o ./build/dnstt-server ./dnstt-server || (echo "Failed to build dnstt-server" && exit 1)
+          
+          echo "Checking contents of the build directory:"
+          ls -la ./build
+
+      - name: Verify binary files
+        run: |
+          if [[ -f "./build/dnstt-client" && -f "./build/dnstt-server" ]]; then
+            echo "Binaries successfully created!"
+          else
+            echo "Binaries are missing!" && exit 1
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dnstt-binaries
-          path: build/*          
+          path: build/*
