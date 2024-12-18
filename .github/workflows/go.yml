@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - master
-  workflow_dispatch: # Возможность ручного запуска
+  workflow_dispatch:
 
 jobs:
   build:
@@ -22,36 +22,24 @@ jobs:
         with:
           go-version: 1.21
 
-      - name: Build
+      - name: Build for Windows
         run: |
-          echo "Creating build directory..."
-          mkdir -p build
-          echo "Building dnstt-client for Windows amd64..."
-          GOOS=windows GOARCH=amd64 go build -o build/dnstt-client.exe ./dnstt-client
-          echo "Building dnstt-server for Windows amd64..."
-          GOOS=windows GOARCH=amd64 go build -o build/dnstt-server.exe ./dnstt-server
-          echo "Contents of the build directory:"
-          ls -la build
+          echo "Creating build directory for Windows..."
+          mkdir -p build/windows
+          GOOS=windows GOARCH=amd64 go build -o build/windows/dnstt-client.exe ./dnstt-client
+          GOOS=windows GOARCH=amd64 go build -o build/windows/dnstt-server.exe ./dnstt-server
+          ls -la build/windows
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dnstt-binaries-${{ github.run_id }}  # Уникальное имя артефакта
-          path: build/*
-          if-no-files-found: warn
-          compression-level: 6
-          overwrite: false
-      
-
-      - name: Debug directories
+      - name: Build for Linux
         run: |
-          echo "=== Current working directory ==="
-          pwd
-          echo "=== Contents of the repository root ==="
-          ls -la
+          echo "Creating build directory for Linux..."
+          mkdir -p build/linux
+          GOOS=linux GOARCH=amd64 go build -o build/linux/dnstt-client ./dnstt-client
+          GOOS=linux GOARCH=amd64 go build -o build/linux/dnstt-server ./dnstt-server
+          ls -la build/linux
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dnstt-binaries
-          path: build/*
+          path: build/**
