@@ -24,17 +24,13 @@ jobs:
 
       - name: Build
         run: |
-          echo "=== Creating build directory ==="
+          echo "Creating build directory..."
           mkdir -p build
           echo "Building dnstt-client..."
-          go build -o build/dnstt-client ./dnstt-client
+          go build -o build/dnstt-client.exe ./dnstt-client
           echo "Building dnstt-server..."
-          go build -o build/dnstt-server ./dnstt-server
-          
-          echo "Adding executable permissions..."
-          chmod +x build/dnstt-client build/dnstt-server
-          
-          echo "=== Checking build directory contents ==="
+          go build -o build/dnstt-server.exe ./dnstt-server
+          echo "Contents of the build directory:"
           ls -la build
 
       - name: Upload artifacts
