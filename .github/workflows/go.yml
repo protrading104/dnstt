@@ -26,10 +26,10 @@ jobs:
         run: |
           echo "Creating build directory..."
           mkdir -p build
-          echo "Building dnstt-client..."
-          go build -o build/dnstt-client.exe ./dnstt-client
-          echo "Building dnstt-server..."
-          go build -o build/dnstt-server.exe ./dnstt-server
+          echo "Building dnstt-client for Windows amd64..."
+          GOOS=windows GOARCH=amd64 go build -o build/dnstt-client.exe ./dnstt-client
+          echo "Building dnstt-server for Windows amd64..."
+          GOOS=windows GOARCH=amd64 go build -o build/dnstt-server.exe ./dnstt-server
           echo "Contents of the build directory:"
           ls -la build
 
