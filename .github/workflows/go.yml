@@ -26,24 +26,22 @@ jobs:
         run: |
           echo "=== Creating build directory ==="
           mkdir -p build
-          ls -la
-
-          echo "=== Building dnstt-client ==="
-          if go build -o ./build/dnstt-client ./dnstt-client; then
-            echo "dnstt-client build successful"
-          else
-            echo "dnstt-client build failed!" && exit 1
-          fi
-
-          echo "=== Building dnstt-server ==="
-          if go build -o ./build/dnstt-server ./dnstt-server; then
-            echo "dnstt-server build successful"
-          else
-            echo "dnstt-server build failed!" && exit 1
-          fi
-
+          echo "Building dnstt-client..."
+          go build -o build/dnstt-client ./dnstt-client
+          echo "Building dnstt-server..."
+          go build -o build/dnstt-server ./dnstt-server
+          
+          echo "Adding executable permissions..."
+          chmod +x build/dnstt-client build/dnstt-server
+          
           echo "=== Checking build directory contents ==="
-          ls -la ./build
+          ls -la build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dnstt-binaries
+          path: build/*
 
       - name: Debug directories
         run: |
