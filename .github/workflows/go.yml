@@ -40,12 +40,11 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dnstt-binaries-${{ github.run_id }}
+          name: dnstt-binaries-${{ github.run_id }}  # Уникальное имя артефакта
           path: build/*
           if-no-files-found: warn
           compression-level: 6
           overwrite: false
-          include-hidden-files: false
       
 
       - name: Debug directories
